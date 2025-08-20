@@ -27,7 +27,8 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-wq87uq+7_k%(ir5-e6h84
 # DEBUG = config('DEBUG', cast=bool, default=True)
 DEBUG = False
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1')
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1')
+ALLOWED_HOSTS = ['pydev054.pythonanywhere.com']
 
 
 # Application definition    
