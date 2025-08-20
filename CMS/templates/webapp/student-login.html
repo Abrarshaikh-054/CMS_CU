@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - Sabour College</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'webapp/styles.css' %}">
+    <style>
+        body { background: linear-gradient(135deg, #f8f9fa 0%, #ffe5e5 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 0; box-sizing: border-box; }
+        .login-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(220,53,69,0.08); padding: 2.5rem 2rem 2rem 2rem; max-width: 400px; width: 100%; margin: 0 1rem; }
+        .login-card .form-control:focus { border-color: var(--primary-red); box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15); }
+        .login-card .btn-primary { background: var(--primary-red); border: none; font-weight: 600; }
+        .login-card .btn-primary:hover { background: var(--gold-accent); color: var(--primary-red); }
+        .login-logo { display: block; margin: 0 auto 1.5rem auto; max-width: 90px; }
+        .login-title { color: var(--primary-red); font-weight: bold; text-align: center; margin-bottom: 1rem; }
+        .login-subtitle { color: #666; text-align: center; margin-bottom: 2rem; }
+        @media (max-width: 500px) { .login-card { padding: 1.5rem 0.5rem; } body { padding: 1rem 0; } }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="{% static 'images/sabour_college_logo.png' %}" alt="Sabour College Logo" class="login-logo">
+        <h2 class="login-title">Student Login</h2>
+        <p class="login-subtitle">Sign in to your student portal</p>
+        {% if messages %}
+            <div class="mb-2">
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        {% with 'danger' as level %}
+                            <div class="alert alert-{{ level }} alert-dismissible fade show py-2 mb-2" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endwith %}
+                    {% elif message.tags == 'warning' %}
+                        <div class="alert alert-warning alert-dismissible fade show py-2 mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% elif message.tags == 'success' %}
+                        <div class="alert alert-success alert-dismissible fade show py-2 mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info alert-dismissible fade show py-2 mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form id="studentLoginForm" method="post" action="" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="identifier" class="form-label">Email or Mobile</label>
+                <input type="text" class="form-control" id="identifier" name="identifier" value="{{ identifier|default:'' }}" placeholder="Enter email or mobile" required>
+                <div class="invalid-feedback">Please enter your registered email or mobile.</div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                <div class="invalid-feedback">Password is required.</div>
+            </div>
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+                <a href="#" class="small text-danger">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+        <div class="text-center mt-3">
+            <span>Don't have an account? <a href="{% url 'student_register' %}" class="text-danger">Register here</a></span>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'webapp/script.js' %}"></script>
+</body>
+</html>

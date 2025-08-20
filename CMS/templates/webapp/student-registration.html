@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Sabour College</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'webapp/styles.css' %}">
+    <style>
+        body { background: linear-gradient(135deg, #f8f9fa 0%, #ffe5e5 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 0; box-sizing: border-box; }
+        .register-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(220,53,69,0.08); padding: 2rem 2rem; max-width: 780px; width: 100%; margin: 0 1rem; }
+        .register-card .form-control:focus { border-color: var(--primary-red); box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.15); }
+        .register-card .btn-primary { background: var(--primary-red); border: none; font-weight: 600; }
+        .register-card .btn-primary:hover { background: var(--gold-accent); color: var(--primary-red); }
+        .register-logo { display: block; margin: 0 auto 1.5rem auto; max-width: 90px; }
+        .register-title { color: var(--primary-red); font-weight: bold; text-align: center; margin-bottom: 0.25rem; }
+        .register-subtitle { color: #666; text-align: center; margin-bottom: 1.25rem; }
+        .input-group-text { background: #f1f3f5; }
+        @media (max-width: 500px) { .register-card { padding: 1.5rem 0.5rem; } body { padding: 1rem 0; } }
+    </style>
+</head>
+<body>
+    <div class="register-card">
+        <img src="{% static 'images/sabour_college_logo.png' %}" alt="Sabour College Logo" class="register-logo">
+        <h2 class="register-title">Register Student Account</h2>
+        <p class="register-subtitle">Fill in the details below to create your account. All fields are mandatory.</p>
+        {% if messages %}
+            <div class="mb-2">
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        {% with 'danger' as level %}
+                            <div class="alert alert-{{ level }} alert-dismissible fade show py-2 mb-2" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endwith %}
+                    {% elif message.tags == 'warning' %}
+                        <div class="alert alert-warning alert-dismissible fade show py-2 mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% elif message.tags == 'success' %}
+                        <div class="alert alert-success alert-dismissible fade show py-2 mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info alert-dismissible fade show py-2 mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form id="studentRegisterForm" method="post" action="" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="firstName" name="first_name" value="{{ first_name|default:'' }}" placeholder="Enter first name" required>
+                    </div>
+                    <div class="invalid-feedback">Please enter a valid first name (min 2 letters).</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="lastName" name="last_name" value="{{ last_name|default:'' }}" placeholder="Enter last name" required>
+                    </div>
+                    <div class="invalid-feedback">Please enter a valid last name (min 2 letters).</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email|default:'' }}" placeholder="Enter your email" required>
+                    </div>
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="mobile" class="form-label">Mobile Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                        <input type="tel" class="form-control" id="mobile" name="mobile" value="{{ mobile|default:'' }}" placeholder="Enter your mobile number" required>
+                    </div>
+                    <div class="invalid-feedback">Enter 10–15 digits only.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" minlength="8" required>
+                    </div>
+                    <div class="invalid-feedback">Password must be at least 8 characters.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Confirm your password" minlength="8" required>
+                    </div>
+                    <div class="invalid-feedback">Passwords do not match.</div>
+                </div>
+                <!-- <div class="col-12">
+                    <small class="text-muted">( Password must be at least 8 characters long. )</small>
+                </div> -->
+                <div class="col-12 d-flex justify-content-between pt-1">
+                    <button type="reset" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i> Reset </button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle"></i> Register</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <span>Already have an account? <a href="{% url 'student_login' %}" class="text-danger">Login here</a></span>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      (function(){
+        const form = document.getElementById('studentRegisterForm');
+        if (!form) return;
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
+        const email = document.getElementById('email');
+        const mobile = document.getElementById('mobile');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        const nameRegex = /^[A-Za-z][A-Za-z\s'\-]{1,}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const mobileRegex = /^\d{10,15}$/;
+
+        const setValidity = (input, ok) => {
+          input.classList.toggle('is-invalid', !ok);
+          input.classList.toggle('is-valid', ok);
+        };
+
+        const validate = () => {
+          const v1 = nameRegex.test(firstName.value.trim());
+          const v2 = nameRegex.test(lastName.value.trim());
+          const v3 = emailRegex.test(email.value.trim());
+          const v4 = mobileRegex.test(mobile.value.trim());
+          const v5 = (password.value || '').length >= 8;
+          const v6 = v5 && confirmPassword.value === password.value;
+          setValidity(firstName, v1);
+          setValidity(lastName, v2);
+          setValidity(email, v3);
+          setValidity(mobile, v4);
+          setValidity(password, v5);
+          setValidity(confirmPassword, v6);
+          return v1 && v2 && v3 && v4 && v5 && v6;
+        };
+
+        const debounce = (fn, wait=150) => { let t; return () => { clearTimeout(t); t=setTimeout(fn, wait); }; };
+        const debouncedValidate = debounce(validate, 150);
+
+        [firstName, lastName, email, mobile, password, confirmPassword].forEach(el=>{
+          el.addEventListener('input', debouncedValidate);
+          el.addEventListener('blur', validate);
+        });
+
+        form.addEventListener('submit', (e)=>{ if (!validate()) { e.preventDefault(); e.stopPropagation(); } });
+      })();
+    </script>
+    <script src="{% static 'webapp/script.js' %}"></script>
+</body>
+</html>
